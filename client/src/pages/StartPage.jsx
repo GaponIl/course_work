@@ -1,153 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import api from '../API/mainAPI'
 
-function StartPage() {
-  const [jokes, setJokes] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [text, setText] = useState('');
-  const [updatedText, setUpdatedText] = useState('');
-  const [updatingId, setUpdatingId] = useState(null);
-  const [isUpdating, setIsUpdating] = useState(false);
+function StartPage({jokes, setJokes, fetchJokes}) {
+  const [isOpenCreateForm, setIsOpenCreateForm] = useState(false)
+  const [jokeText, setJokeText] = useState('')
+  const [updatingID, setUpdatingID] = useState(null)
+  const [newJokeText, setNewJokeText] = useState('')
+  const [dailyJoke, setDailyJoke] = useState(null)
   const navigate = useNavigate()
-  
-  useEffect(() => {
-    const fetchJokes = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/');
-        setJokes(response.data.rows);
-      } catch (error) {
-        console.error('Ошибка загрузки:', error);
-      }
-    };
-    fetchJokes();
-  }, []);
 
-  const addJoke = async () => {
-    if (text.trim() === "") {
-      alert("Введите текст шутки!");
-      return;
-    }
-
+  const createJoke = async (jokeText) => {
     try {
-      const response = await axios.post('http://localhost:8080/jokes', { content: text });
-      setJokes(prev => [...prev, response.data]);
-      setText('');
+      const response = await api.createJoke(jokeText)
+      setJokes(prev => [...prev, response])
+      console.log(response)
+      setJokeText('')
     } catch (error) {
-      console.error('Ошибка:', error.response?.data || error.message);
+      console.error(error)
     }
-  };
+  }
+
+  const updateJoke = async (id, text) => {
+    try {
+      const response = await api.updateJoke(id, text)
+      setJokes(prev => prev.map(joke => joke.id === updatingID ? { ...response } : joke))
+      setUpdatingID(null)
+      setNewJokeText('')
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const deleteJoke = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/jokes/${id}`);
+      await api.deleteJoke(id)
       setJokes(prev => prev.filter(joke => joke.id !== id));
     } catch (error) {
-      console.error('Ошибка:', error.response?.data || error.message);
+      console.error(error);
     }
-  };
-
-  const updateJoke = async () => {
-    try {
-      setIsUpdating(true);
-      const response = await axios.put(`http://localhost:8080/jokes/${updatingId}`, { content: updatedText });
-      setJokes(jokes.map(joke => 
-        joke.id === updatingId ? response.data : joke
-      ));
-      setUpdatingId(null);
-      setUpdatedText('');
-    } catch (error) {
-      console.error('Ошибка:', error.response?.data || error.message);
-    } finally {
-      setIsUpdating(false);
-    }
-  };
-
-  const dateToday = async () => {
-    const response = await axios.get(`http://localhost:8080/jokeofday`)
-    console.log(response.data)
   }
 
+  const fetchDailyJoke = async () => {
+    try {
+      const response = await api.getDailyJoke()
+      setDailyJoke(response)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => fetchDailyJoke, [])
   return (
-    <div>
-      <button onClick={() => navigate('/information')}>
-        Информация об авторе
-      </button>
-      <button onClick={() => dateToday()}>Анекдот дня</button>
-      {!isOpen && (
-        <button disabled={updatingId !== null} onClick={() => setIsOpen(true)}>Добавить шутку</button>
-      )}
+  <div>
+    <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => navigate('/information')}>Информация об авторе сайта</button>
 
-      {isOpen && (
-        <div>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Введите шутку"
-          />
-          <button 
-            disabled={text.trim() === ""} 
-            onClick={async () => {
-              await addJoke();
-              setIsOpen(false);
-            }}
-          >
-            Подтвердить
-          </button>
-          <button onClick={() => {
-            setText('');
-            setIsOpen(false);
-          }}>
-            Отмена
-          </button>
-        </div>
-      )}
+    <h1>Анекдот дня</h1>
+    <p1>{dailyJoke.content}</p1>
 
-      <div>
-        {jokes.map((joke) => (
-          <div key={joke.id}>
-            {joke.content}
-            <button disabled={isOpen || updatingId !== null} onClick={() => deleteJoke(joke.id)}>Удалить</button>
-            
-            {updatingId === joke.id ? (
-              <>
-                <textarea
-                  value={updatedText}
-                  onChange={(e) => setUpdatedText(e.target.value)}
-                  disabled={isUpdating}
-                />
-                <button 
-                  onClick={updateJoke} 
-                  disabled={isUpdating || updatedText.trim() === ""}
-                >
-                  {isUpdating ? "Сохранение..." : "Сохранить"}
-                </button>
-                <button 
-                  onClick={() => {
-                    setUpdatingId(null);
-                    setUpdatedText('');
-                  }}
-                  disabled={isUpdating}
-                >
-                  Отмена
-                </button>
-              </>
-            ) : (
-              <button 
-                onClick={() => {
-                  setUpdatingId(joke.id);
-                  setUpdatedText(joke.content)
-                }}
-                disabled={updatingId !== null || isOpen}
-              >
-                Изменить
-              </button>
-            )}
-          </div>
-        ))}
+    <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => setIsOpenCreateForm(true)}>Добавить анекдот</button>
+
+    {isOpenCreateForm && (
+      <>
+       <textarea 
+        value={jokeText}
+        onChange={(e) => setJokeText(e.target.value)}
+       />
+      <button disabled={jokeText.trim() === ''} onClick={() => {createJoke(jokeText); setIsOpenCreateForm(false);}}>Подтвердить</button>
+      <button onClick={() => {setJokeText(''); setIsOpenCreateForm(false);}}>Отмена</button>
+      </>
+    )}
+    {jokes.map(joke => (
+      <div key={joke.id}>{joke.content}
+        {updatingID === joke.id ? (
+          <>
+            <textarea 
+              value={newJokeText}
+              onChange={(e) => setNewJokeText(e.target.value)}
+            />
+            <button disabled={newJokeText.trim() === ''} onClick={() => updateJoke(joke.id, newJokeText)}>Подтвердить</button>
+            <button onClick={() => {setUpdatingID(null); setNewJokeText('')}}>Отмена</button>
+          </>
+        ) : (
+          <>
+            <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => {setUpdatingID(joke.id); setNewJokeText(joke.content)}}>Изменить</button>
+            <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => deleteJoke(joke.id)}>Удалить</button>
+          </>
+        )}
       </div>
-    </div>
-  );
+    ))}
+  </div>
+)
 }
 
-export default StartPage;
+export default StartPage

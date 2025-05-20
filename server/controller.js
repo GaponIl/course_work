@@ -1,85 +1,80 @@
 import pool from './db.js'
 import path from 'path'
-import { fileURLToPath } from 'url';
+import { scheduler } from 'timers/promises'
+import { fileURLToPath } from 'url'
+import schedule from 'node-schedule'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+let dailyJoke = null
 
 class Controller 
 {
-    async ping(req, res)
-    {
-        res.status(200).json('ОТСОСИ БЛЯ')
+    constructor() {
+        schedule.scheduleJob('0 0 * * *', async () => {
+            try {
+                const response = await pool.query(`SELECT * FROM jokes ORDER BY RANDOM() LIMIT 1`)
+                dailyJoke = response
+            } catch (error) {
+                console.error(error)
+            }
+        })
     }
-    getJokeOfDay(req, res)
-    {
-        const today = new Date()
-        day = today.getDay()
-        res.json(day)
+    async getAllJokes(req, res) {
+        try {
+            const response = await pool.query(`SELECT * FROM jokes`)
+            res.json(response)
+        } catch (error) {
+            console.error(error)
+        }
     }
-    async getAllJokes(req, res) 
-    {
-        const joke = await pool.query(`SELECT * FROM jokes`)
-        res.json(joke)
+
+    async getAllJokes(req, res) {
+        try {
+            const response = await pool.query(`SELECT * FROM jokes`)
+            res.json(response)
+        } catch (error) {
+            console.error(error)
+        }
     }
-    async createJoke(req, res)
-    {
-        try 
-        {
+
+    async createJoke(req, res) {
+        try {
             const {content} = req.body
-            const joke = await pool.query(`INSERT INTO jokes (content) values($1) RETURNING *`, [content])
-            res.json(joke.rows[0])
-        } 
-        catch (err) 
-        {
-            console.error("Ошибка базы данных:", err)
-            res.status(500).json({ error: "Внутренняя ошибка сервера" })
+            const response = await pool.query(`INSERT INTO jokes (content) values($1) RETURNING *`, [content])
+            res.json(response)
+        } catch (error) {
+            console.error(error)
         }
     }
-    async getJoke(req, res)
-    {
-        try 
-        {
-            const id = req.params.id
-            const joke = await pool.query(`SELECT * FROM jokes where id = $1`, [id])
-            if (!joke.rows[0]) res.status(404).json({ error: "Анекдот не найден" })
-            res.json(joke.rows[0])
-        } 
-        catch (err) 
-        {
-            console.error("Ошибка базы данных:", err)
-            res.status(500).json({ error: "Внутренняя ошибка сервера" })
-        }
-    }
-    async updateJoke(req, res)
-    {
-        try 
-        {
+
+    async updateJoke(req, res) {
+        try {
             const id = req.params.id
             const {content} = req.body
-            const joke = await pool.query(`UPDATE jokes set content = $1 where id = $2 RETURNING *`, [content, id])
-            if (!joke.rows[0]) res.status(404).json({ error: "Анекдот не найден" })
-            res.json(joke.rows[0])
-        } 
-        catch (err) 
-        {
-            console.error("Ошибка базы данных:", err)
-            res.status(500).json({ error: "Внутренняя ошибка сервера" })
+            const response = await pool.query(`UPDATE jokes set content = $1 where id = $2 RETURNING *`, [content, id])
+            res.json(response)
+        } catch (error) {
+            console.error(error)
         }
     }
-    async deleteJoke(req, res)
-    {
-        try 
-        {
+
+    async deleteJoke(req, res) {
+        try { 
             const id = req.params.id
-            const joke = await pool.query(`DELETE FROM jokes where id = $1 RETURNING *`, [id])
-            if (!joke.rows[0]) res.status(404).json({ error: "Анекдот не найден" })
-            res.json(joke.rows[0])
-        } 
-        catch 
-        {
-            console.error("Ошибка базы данных:", err)
-            res.status(500).json({ error: "Внутренняя ошибка сервера" })
+            const response = await pool.query(`DELETE FROM jokes where id = $1 RETURNING *`, [id])
+            res.json(response.rows[0])
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async getDailyJoke(req, res) {
+        try {
+            res.json(dailyJoke)
+        } catch (error) {
+            console.error
         }
     }
 }
