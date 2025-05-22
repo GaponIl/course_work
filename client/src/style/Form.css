@@ -1,0 +1,44 @@
+.form-bg {
+    background-color: #00000083;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+.form-container {
+    background-image: url('../images/form.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-width: 800px;
+    min-height: 413px;
+    height: 40%;
+}
+
+.form-data {
+    height: 36%;
+    padding: 12% 14% 0 10%;
+}
+.form-body textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 1rem;
+    margin-bottom: 13.5vh;
+}
+
+.forms-buttons {
+    display: flex;
+    justify-content: end;
+    margin-top: 10px;
+}
+
+

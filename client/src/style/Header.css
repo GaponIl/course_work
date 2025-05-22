@@ -1,0 +1,19 @@
+.header {
+    background-image: url('../images/header.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 20vh;
+    width: 99vw;
+
+    display: flex;
+    margin-top: 10px; 
+}
+
+.header-buttons {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    width: 80%;
+}

@@ -1,0 +1,30 @@
+.addButton {
+    background-image: url('../images/addbutton.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    min-width: 192px;
+    min-height: 50px;
+    background-color: transparent;
+    font-size: larger;
+}
+
+.returnButton {
+    background-image: url('../images/returnbutton.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    min-width: 192px;
+    min-height: 50px;
+    background-color: transparent;
+    font-size: larger;
+    
+}

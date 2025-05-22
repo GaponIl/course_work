@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import api from '../API/mainAPI'
+import Header from '../components/Header.jsx'
+import Form from '../components/Form.jsx'
+import Button from '../components/Button.jsx'
+import '../style/StartPage.css'
 
-function StartPage({jokes, setJokes, fetchJokes}) {
+function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setUser}) {
   const [isOpenCreateForm, setIsOpenCreateForm] = useState(false)
   const [jokeText, setJokeText] = useState('')
   const [updatingID, setUpdatingID] = useState(null)
   const [newJokeText, setNewJokeText] = useState('')
-  const navigate = useNavigate()
 
   const createJoke = async (jokeText) => {
     try {
@@ -40,21 +42,37 @@ function StartPage({jokes, setJokes, fetchJokes}) {
     }
   }
 
-  return (
-  <div>
-    <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => navigate('/information')}>Информация об авторе сайта</button>
+  useEffect(() => {
+    console.log(dailyJoke);
+   // eslint-disable-next-line
+  }, [])
 
+  return (
+  <div className='startPage'>
+
+    <Header user={user} setUser={setUser}/>
     <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => setIsOpenCreateForm(true)}>Добавить анекдот</button>
 
+    {dailyJoke && (
+      <div className="dailyJoke" id={dailyJoke.id}>
+        <div className="dailyJoke-content">
+          <h1>{dailyJoke.content}</h1>
+        </div>
+      </div>
+    )}
+
+
     {isOpenCreateForm && (
-      <>
+      <Form title='Добавить анекдот'>
        <textarea 
         value={jokeText}
         onChange={(e) => setJokeText(e.target.value)}
        />
-      <button disabled={jokeText.trim() === ''} onClick={() => {createJoke(jokeText); setIsOpenCreateForm(false);}}>Подтвердить</button>
-      <button onClick={() => {setJokeText(''); setIsOpenCreateForm(false);}}>Отмена</button>
-      </>
+      <div className='forms-buttons'>
+        <Button type='addButton' disabled={jokeText.trim() === ''} onClick={() => {createJoke(jokeText); setIsOpenCreateForm(false);}}>Подтвердить</Button>
+        <Button type='returnButton' onClick={() => {setJokeText(''); setIsOpenCreateForm(false);}}>Отмена</Button>
+      </div>
+      </Form>
     )}
     {jokes.map(joke => (
       <div key={joke.id}>{joke.content}
@@ -68,10 +86,14 @@ function StartPage({jokes, setJokes, fetchJokes}) {
             <button onClick={() => {setUpdatingID(null); setNewJokeText('')}}>Отмена</button>
           </>
         ) : (
-          <>
-            <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => {setUpdatingID(joke.id); setNewJokeText(joke.content)}}>Изменить</button>
-            <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => deleteJoke(joke.id)}>Удалить</button>
-          </>
+          user?.role == "admin" ? (
+            <>
+              <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => {setUpdatingID(joke.id); setNewJokeText(joke.content)}}>Изменить</button>
+              <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => deleteJoke(joke.id)}>Удалить</button>
+            </>
+          ) : (
+            <></>
+          )
         )}
       </div>
     ))}

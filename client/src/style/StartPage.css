@@ -1,0 +1,42 @@
+.startPage {
+    padding-top: 3vh;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.dailyJoke {
+    background-image: url('../images/dailybg.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    max-width: 100%;
+    height: 62vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.dailyJoke-content {
+    background-image: url('../images/dailycont.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 27px;
+    top: -11%;
+    left: 12vw;
+    position: absolute;
+    min-width: 40vw;
+    min-height: 53vh;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+}
+.dailyJoke-content h1 {
+    position: relative;
+    font-size: 1.5vw;
+    max-width: 25vw;
+}
+
