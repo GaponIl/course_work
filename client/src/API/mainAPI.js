@@ -37,15 +37,6 @@ class API {
             throw error
         }
     }
-
-    async getDailyJoke() {
-        try {
-            const response = await axios.get(`${addr}/joke-of-the-day`)
-            return response.data
-        } catch (error) {
-            throw error
-        }
-    }
 }
 const api = new API()
 

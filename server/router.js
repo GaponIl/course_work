@@ -7,6 +7,5 @@ router.get('/', contr.getAllJokes)
 router.post('/jokes', contr.createJoke)
 router.put('/jokes/:id', contr.updateJoke)
 router.delete('/jokes/:id', contr.deleteJoke)
-router.get('/dailyjoke', contr.getDailyJoke)
 
 export default router

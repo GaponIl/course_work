@@ -7,7 +7,6 @@ function StartPage({jokes, setJokes, fetchJokes}) {
   const [jokeText, setJokeText] = useState('')
   const [updatingID, setUpdatingID] = useState(null)
   const [newJokeText, setNewJokeText] = useState('')
-  const [dailyJoke, setDailyJoke] = useState(null)
   const navigate = useNavigate()
 
   const createJoke = async (jokeText) => {
@@ -41,22 +40,9 @@ function StartPage({jokes, setJokes, fetchJokes}) {
     }
   }
 
-  const fetchDailyJoke = async () => {
-    try {
-      const response = await api.getDailyJoke()
-      setDailyJoke(response)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => fetchDailyJoke, [])
   return (
   <div>
     <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => navigate('/information')}>Информация об авторе сайта</button>
-
-    <h1>Анекдот дня</h1>
-    <p1>{dailyJoke.content}</p1>
 
     <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => setIsOpenCreateForm(true)}>Добавить анекдот</button>
 
