@@ -4,8 +4,11 @@ import Header from '../components/Header.jsx'
 import Form from '../components/Form.jsx'
 import Button from '../components/Button.jsx'
 import '../style/StartPage.css'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setUser}) {
+  const navigate = useNavigate()
+
   const [isOpenCreateForm, setIsOpenCreateForm] = useState(false)
   const [jokeText, setJokeText] = useState('')
   const [updatingID, setUpdatingID] = useState(null)
@@ -14,7 +17,7 @@ function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setU
   const createJoke = async (jokeText) => {
     try {
       const response = await api.createJoke(jokeText)
-      setJokes(prev => [...prev, response])
+      setJokes(prev => [response, ...prev])
       console.log(response)
       setJokeText('')
     } catch (error) {
@@ -51,8 +54,7 @@ function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setU
   <div className='startPage'>
 
     <Header user={user} setUser={setUser}/>
-    <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => setIsOpenCreateForm(true)}>Добавить анекдот</button>
-
+  
     {dailyJoke && (
       <div className="dailyJoke" id={dailyJoke.id}>
         <div className="dailyJoke-content">
@@ -61,7 +63,15 @@ function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setU
       </div>
     )}
 
-
+    <div className='container'>
+      {user?.role == 'admin' ? (
+        <Button type='createButton' disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => setIsOpenCreateForm(true)}></Button>
+      ) : (
+        <></>
+      )}
+      <Button type='infoButton' onClick={() => navigate('/information')}>Информация о создателе сайта</Button>
+    </div>
+  
     {isOpenCreateForm && (
       <Form title='Добавить анекдот'>
        <textarea 
@@ -75,22 +85,24 @@ function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setU
       </Form>
     )}
     {jokes.map(joke => (
-      <div key={joke.id}>{joke.content}
+      <div className='joke' key={joke.id}>{joke.content}
         {updatingID === joke.id ? (
           <>
             <textarea 
               value={newJokeText}
               onChange={(e) => setNewJokeText(e.target.value)}
             />
-            <button disabled={newJokeText.trim() === ''} onClick={() => updateJoke(joke.id, newJokeText)}>Подтвердить</button>
-            <button onClick={() => {setUpdatingID(null); setNewJokeText('')}}>Отмена</button>
+            <div className='confirmCancel-button'>
+              <Button type='confirmButton' disabled={newJokeText.trim() === ''} onClick={() => updateJoke(joke.id, newJokeText)}></Button>
+              <Button type='cancelButton' onClick={() => {setUpdatingID(null); setNewJokeText('')}}></Button>
+            </div>
           </>
         ) : (
-          user?.role == "admin" ? (
-            <>
-              <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => {setUpdatingID(joke.id); setNewJokeText(joke.content)}}>Изменить</button>
-              <button disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => deleteJoke(joke.id)}>Удалить</button>
-            </>
+          user?.role == 'admin' ? (
+            <div className='updateDelete-button'>
+              <Button type='updateButton' disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => {setUpdatingID(joke.id); setNewJokeText(joke.content)}}></Button>
+              <Button type='deleteButton' disabled={isOpenCreateForm || !(updatingID === null)} onClick={() => deleteJoke(joke.id)}></Button>
+            </div>
           ) : (
             <></>
           )

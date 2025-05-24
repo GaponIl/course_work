@@ -16,27 +16,66 @@
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    margin-bottom: 50px;
 }
 
 .dailyJoke-content {
-    background-image: url('../images/dailycont.png');
+    background-image: url('../images/dailycont.svg');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     padding: 27px;
     top: -11%;
-    left: 12vw;
+    left: 11vw;
     position: absolute;
     min-width: 40vw;
     min-height: 53vh;
-    display: flex
-;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .dailyJoke-content h1 {
     position: relative;
     font-size: 1.5vw;
     max-width: 25vw;
 }
 
+.joke {
+    background-image: url('../images/jokebg.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    max-width: 65%;
+    height: 30vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+.updateDelete-button {
+    position: absolute;
+    bottom: -65px;
+    right: 40px;
+    display: flex;
+    gap: 8px;
+}
+
+.confirmCancel-button {
+    position: absolute;
+    bottom: -65px;
+    right: 40px;
+    display: flex;
+    gap: 8px;
+}
+
+.container {
+    justify-content: center;
+    display: flex;
+    margin-bottom: 1vw;
+    min-width: 20vw;
+    min-height: 10vw;
+}

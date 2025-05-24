@@ -56,7 +56,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/information" element={<InformationPage />}/>
+        <Route path="/information" element={<InformationPage user={user} setUser={setUser}/>}/>
 
         <Route path="/signin" element={<SignIn setUser={setUser} user={user} />}/>
         <Route path="/signup" element={<SignUp setUser={setUser} user={user} />}/>
