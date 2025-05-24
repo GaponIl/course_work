@@ -53,6 +53,7 @@ function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setU
   return (
   <div className='startPage'>
 
+    <Button type='infoButton' onClick={() => navigate('/information')}></Button>
     <Header user={user} setUser={setUser}/>
   
     {dailyJoke && (
@@ -69,7 +70,6 @@ function StartPage({dailyJoke, setDaily, jokes, setJokes, fetchJokes, user, setU
       ) : (
         <></>
       )}
-      <Button type='infoButton' onClick={() => navigate('/information')}>Информация о создателе сайта</Button>
     </div>
   
     {isOpenCreateForm && (

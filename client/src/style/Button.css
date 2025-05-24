@@ -105,9 +105,16 @@
 }
 
 .infoButton {
-    /* border: none;
+    background-image: url('../images/infobutton.svg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border: none;
     cursor: pointer;
-    background-color: transparent;  */
-    width: 6vw;
-    height: 6vw;
+    background-color: transparent; 
+    width: 5vw;
+    height: 5vw;
 }
