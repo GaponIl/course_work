@@ -13,7 +13,7 @@
 
 .form-container {
     background-image: url('../images/form.png');
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     min-width: 800px;
@@ -22,9 +22,10 @@
 }
 
 .form-data {
-    height: 36%;
+    height: 100%;
     padding: 12% 14% 0 10%;
 }
+
 .form-body textarea {
     width: 100%;
     height: 100%;
@@ -33,6 +34,7 @@
     resize: none;
     font-size: 1rem;
     margin-bottom: 13.5vh;
+
 }
 
 .forms-buttons {

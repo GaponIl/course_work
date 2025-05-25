@@ -4,25 +4,25 @@ import '../style/Header.css'
 import api from '../API/mainAPI'
 import Button from './Button'
 
-const Header = ({user, setUser}) => {
-    const navigate = useNavigate()
+const Header = ({ user, setUser }) => {
+  const navigate = useNavigate()
   return (
     <header className='header'>
-        {/* <button onClick={() => navigate('/information')}>Информация об авторе сайта</button> */}
-        <div className='header-buttons'>
+      <div className='header-buttons'>
         {user !== null ? (
-            <Button type='addButton' onClick={() => {
-              api.signOut()
-              setUser(null)
-              navigate('/')
-            }}>Выход</Button>
+          <Button type='signoutButton' onClick={() => {
+            api.signOut()
+            setUser(null)
+            navigate('/')
+          }}></Button>
         ) : (
-            <>
-                <Button type='addButton' onClick={() => navigate('/signin')}>Вход</Button>
-                <Button type='addButton' onClick={() => navigate('/signup')}>Регистрация</Button>
-            </>
+          <>
+            <Button type='loginButton' onClick={() => navigate('/signin')}></Button>
+            <Button type='signupButton' onClick={() => navigate('/signup')}></Button>
+          </>
         )}
-        </div>
+        <Button type='infoButton' onClick={() => navigate('/information')}></Button>
+      </div>
     </header>
   )
 }

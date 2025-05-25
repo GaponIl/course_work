@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50px" height="50px" viewBox="0 0 50 50" version="1.1">
-<g id="surface1">
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 25 0 C 11.25 0 0 11.25 0 25 C 0 38.75 11.25 50 25 50 C 38.75 50 50 38.75 50 25 C 50 11.25 38.75 0 25 0 Z M 25 44.75 C 14.25 44.75 5.25 36 5.25 25 C 5.25 14.25 14 5.25 25 5.25 C 36 5.25 44.75 14 44.75 25 C 44.75 35.75 35.75 44.75 25 44.75 Z M 25 44.75 "/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 20 28 L 14.5 22.5 L 11 26 L 20 35 L 37.75 17.25 L 34.25 13.75 Z M 20 28 "/>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_55_73)">
+<path d="M100 0C45 0 0 45 0 100C0 155 45 200 100 200C155 200 200 155 200 100C200 45 155 0 100 0ZM100 179C57 179 21 144 21 100C21 57 56 21 100 21C144 21 179 56 179 100C179 143 143 179 100 179Z" fill="black"/>
+<path d="M80 112L58 90L44 104L80 140L151 69L137 55L80 112Z" fill="black"/>
 </g>
+<defs>
+<clipPath id="clip0_55_73">
+<rect width="200" height="200" fill="white"/>
+</clipPath>
+</defs>
 </svg>
